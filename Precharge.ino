@@ -32,8 +32,10 @@ const int DEBUG_PRINT_DELAY = 100; // Time to wait before printing another debug
 
 
 void setup() {
+#ifdef DEBUG
   // Initialize serial for debugging
   Serial.begin(9600);
+#endif
 
   // Configure pins
   pinMode(shutdown_in,            INPUT);
