@@ -12,7 +12,7 @@
 #define fault_led              (6)  // Fault red LED
 
 // Constants
-#define PRECHARGE_TIMEOUT_MS (6000) // Time to wait before precharge timeout (6 seconds)
+#define PRECHARGE_TIMEOUT_MS (8000) // Time to wait before precharge timeout
 
 // State
 enum States { IDLE, CHARGING_WAIT, COMPLETE };
