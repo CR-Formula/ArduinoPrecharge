@@ -13,12 +13,14 @@
 
 // Constants
 #define PRECHARGE_TIMEOUT_MS (8000) // Time to wait before precharge timeout
+#define SHUTDOWN_LOSS_MS     (500)  // Time to consider a loss of shutdown (ignored if too short)
 
 // State
 enum States { IDLE, CHARGING_WAIT, COMPLETE };
 States state = IDLE;
 int last_button_state = LOW; // For edge detection of button press
 unsigned long precharge_start_time = 0; // The time (ms) the precharge process started at
+unsigned long last_high_shutdown_time = 0; // The time (ms) that shutdown was last HIGH
 
 // Debug
 #ifdef DEBUG
@@ -60,7 +62,9 @@ void loop() {
   last_button_state = current_button_state;
   
   // Shutdown check
-  if (digitalRead(shutdown_in) == LOW) {
+  int shutdown_status = digitalRead(shutdown_in);
+  
+  if (shutdown_status == LOW && millis() - last_high_shutdown_time >= SHUTDOWN_LOSS_MS) {
 #ifdef DEBUG
     if (millis() - last_debug_print >= DEBUG_PRINT_DELAY) {
       Serial.println("Shutdown off!");
@@ -68,6 +72,10 @@ void loop() {
     }
 #endif
     state = IDLE;
+  }
+  
+  if (shutdown_status == HIGH) {
+    last_high_shutdown_time = millis();
   }
 
   // Status LEDs
