@@ -13,7 +13,7 @@
 
 // Constants
 #define PRECHARGE_TIMEOUT_MS (8000) // Time to wait before precharge timeout
-#define SHUTDOWN_LOSS_MS     (500)  // Time to consider a loss of shutdown (ignored if too short)
+#define SHUTDOWN_LOSS_MS     (100)  // Time to consider a loss of shutdown (ignored if too short)
 
 // State
 enum States { IDLE, CHARGING_WAIT, COMPLETE };
@@ -63,7 +63,7 @@ void loop() {
   
   // Shutdown check
   int shutdown_status = digitalRead(shutdown_in);
-  
+
   if (shutdown_status == LOW && millis() - last_high_shutdown_time >= SHUTDOWN_LOSS_MS) {
 #ifdef DEBUG
     if (millis() - last_debug_print >= DEBUG_PRINT_DELAY) {
